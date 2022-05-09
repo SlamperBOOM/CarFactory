@@ -2,13 +2,16 @@ package factory.suppliers;
 
 import factory.details.Accessory;
 import factory.storages.AccessoryStorage;
+import threadPool.AccessorySuppliersPool;
 
 public class AccessorySupplier extends Thread{
     AccessoryStorage storage;
     int period = 1000;
+    AccessorySuppliersPool pool;
 
-    public AccessorySupplier(AccessoryStorage storage){
+    public AccessorySupplier(AccessoryStorage storage, AccessorySuppliersPool pool){
         this.storage = storage;
+        this.pool = pool;
     }
 
     @Override
@@ -17,6 +20,7 @@ public class AccessorySupplier extends Thread{
             try {
                 sleep(period);
                 storage.putAccessory(new Accessory());
+                pool.add();
             }catch (InterruptedException e){
 
             }

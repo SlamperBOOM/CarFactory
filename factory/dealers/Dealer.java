@@ -13,7 +13,7 @@ public class Dealer {
     }
 
     public void sellCar(){
-        Car car = storage.getCar();
-        System.out.println("Dealer " + ID + " sold car, Car ID: " + car.getID() + " " + car.getComponentsID());
+        Car car = storage.getCar(ID);
+        System.out.println("Dealer " + ID + " sold car: Car ID: " + car.getID() + ", " + car.getComponentsID());
     }
 }

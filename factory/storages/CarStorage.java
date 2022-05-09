@@ -1,37 +1,46 @@
 package factory.storages;
 
+import factory.UI.View;
+import factory.UI.NotifierType;
+import factory.UI.UpdateValue;
 import factory.details.Car;
-import threadPool.WorkerPool;
+import threadPool.workerPool.WorkerPool;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarStorage{
-    List<Car> cars;
-    WorkerPool workers;
-    int maxSize;
-    int ID = 0;
+    private List<Car> cars;
+    private List<Integer> dealersQueue;
+    private WorkerPool workers;
+    private int maxSize;
+    private int carID = 0;
+    View view;
 
-    public CarStorage(int size){
+    public CarStorage(int size, View ui){
         this.maxSize = size;
-        cars = new ArrayList<Car>();
+        view = ui;
+        cars = new ArrayList<>();
+        dealersQueue = new ArrayList<>();
     }
 
     public void setWorkers(WorkerPool workers){
         this.workers = workers;
     }
 
-    public synchronized Car getCar(){
-        while(cars.size() < 1) {
+    public synchronized Car getCar(int dealerID){
+        workers.assembleCar();
+        dealersQueue.add(dealerID);
+        while(!(cars.size() > 0 /*&& dealersQueue.get(0) == dealerID*/)) {
            try{
-               workers.assembleCar();
                wait();
            }catch (InterruptedException e){
                e.printStackTrace();
            }
         }
-        Car car = cars.get(0);
-        cars.remove(0);
+        Car car = cars.remove(0);
+        dealersQueue.remove(0);
+        view.updateUI(NotifierType.storage, StorageType.car, new UpdateValue(cars.size()));
         notify();
         return car;
     }
@@ -44,11 +53,10 @@ public class CarStorage{
                 e.printStackTrace();
             }
         }
-        car.setID(ID);
-        ID++;
+        car.setID(carID);
+        carID++;
         cars.add(car);
-        System.out.println("Car added, ID: " + car.getID());
-        System.out.println("Size: " + cars.size());
+        view.updateUI(NotifierType.storage, StorageType.car, new UpdateValue(cars.size()));
         notify();
     }
 

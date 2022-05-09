@@ -1,5 +1,8 @@
 package factory.storages;
 
+import factory.UI.UpdateValue;
+import factory.UI.View;
+import factory.UI.NotifierType;
 import factory.details.Body;
 
 import java.util.ArrayList;
@@ -8,10 +11,12 @@ import java.util.List;
 public class BodyStorage{
     List<Body> bodies;
     int size;
+    View view;
 
-    public BodyStorage(int size){
+    public BodyStorage(int size, View ui){
         this.size = size;
         bodies = new ArrayList<>();
+        view = ui;
     }
 
     public synchronized Body getBody(){
@@ -25,6 +30,7 @@ public class BodyStorage{
         Body body = bodies.get(0);
         bodies.remove(0);
         notify();
+        view.updateUI(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size()));
         return body;
     }
 
@@ -38,6 +44,7 @@ public class BodyStorage{
         }
         bodies.add(body);
         notify();
+        view.updateUI(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size()));
     }
 
     public int getCount(){

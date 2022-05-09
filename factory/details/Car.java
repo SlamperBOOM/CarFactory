@@ -24,9 +24,9 @@ public class Car {
 
     public String getComponentsID(){
         StringBuilder message = new StringBuilder("Body ID: " + body.getID());
-        message.append(" Engine ID: " + engine.getID());
+        message.append(", Engine ID: " + engine.getID());
         for(int i=0; i<accessories.size(); ++i) {
-            message.append(" Accessory " + (i+1) + " ID: " + accessories.get(i).getID());
+            message.append(", Accessory " + (i+1) + " ID: " + accessories.get(i).getID());
         }
         return message.toString();
     }

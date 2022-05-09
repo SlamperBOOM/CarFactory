@@ -1,17 +1,22 @@
 package factory.storages;
 
+import factory.UI.UpdateValue;
+import factory.UI.View;
+import factory.UI.NotifierType;
 import factory.details.Accessory;
 
 import java.util.*;
 
 public class AccessoryStorage{
     List<Accessory> accessories;
+    View view;
     int size;
     int ID;
 
-    public AccessoryStorage(int size){
+    public AccessoryStorage(int size, View ui){
         this.size = size;
         accessories = new ArrayList<>();
+        view = ui;
     }
 
     public synchronized Accessory getAccessory(){
@@ -25,6 +30,7 @@ public class AccessoryStorage{
         Accessory accessory = accessories.get(0);
         accessories.remove(0);
         notify();
+        view.updateUI(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size()));
         return accessory;
     }
 
@@ -39,6 +45,8 @@ public class AccessoryStorage{
         accessory.setID(ID);
         accessories.add(accessory);
         ID++;
+        notify();
+        view.updateUI(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size()));
     }
 
     public int getCount() {

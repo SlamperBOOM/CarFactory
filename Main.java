@@ -1,15 +1,16 @@
 import factory.Factory;
-import factory.UserInterface;
+import factory.UI.UserInterface;
 
 public class Main {
     public static void main(String[] args){
         UserInterface ui = new UserInterface();
-        Factory factory = new Factory();
+        Factory factory = new Factory(ui);
         if(factory.initFactory() == 1){
-            ui.showMessage("Can't read config file, exiting");
-            ui.exit();
+            System.err.println("Can't read config file. Exiting");
             return;
         }
+        ui.createContentPane(factory.getWorkersCount(), factory.getDealersCount(), factory.getAccessorySuppliers());
+        ui.setSetter(factory);
         factory.start();
     }
 }
