@@ -14,6 +14,8 @@ import java.util.List;
 public class UserInterface implements View, ChangeListener {
     JFrame window;
     List<JTextField> workersView;
+    JTextField workersQueue;
+    JTextField workersProduced;
     List<JTextField> dealersView;
     JTextField carStorageView;
     JTextField bodyStorageView;
@@ -40,7 +42,7 @@ public class UserInterface implements View, ChangeListener {
         this.setter = setter;
     }
 
-    public void createContentPane(int workersCount, int dealersCount, int accessorySuppliersCount){
+    public void createContentPane(int workersCount, int dealersCount){
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 
@@ -86,7 +88,7 @@ public class UserInterface implements View, ChangeListener {
                 slider.setName("BodySupplier");
                 slider.addChangeListener(this);
                 supplierPane.add(slider);
-                bodySupplierProductivity = new JTextField("Productivity: 180 items/min");
+                bodySupplierProductivity = new JTextField("Productivity: 120 items/min");
                 supplierPane.add(bodySupplierProductivity);
             }
             case engine -> {
@@ -99,7 +101,7 @@ public class UserInterface implements View, ChangeListener {
                 slider.setName("EngineSupplier");
                 slider.addChangeListener(this);
                 supplierPane.add(slider);
-                engineSupplierProductivity = new JTextField("Productivity: 180 items/min");
+                engineSupplierProductivity = new JTextField("Productivity: 120 items/min");
                 supplierPane.add(engineSupplierProductivity);
             }
             case accessory -> {
@@ -112,7 +114,7 @@ public class UserInterface implements View, ChangeListener {
                 slider.setName("AccessorySupplier");
                 slider.addChangeListener(this);
                 supplierPane.add(slider);
-                accessorySupplierProductivity = new JTextField("Productivity: 60 items/min");
+                accessorySupplierProductivity = new JTextField("Productivity of each: 60 items/min");
                 supplierPane.add(accessorySupplierProductivity);
             }
         }
@@ -160,15 +162,31 @@ public class UserInterface implements View, ChangeListener {
     private JPanel createWorkersPane(int workersCount){
         JPanel workersPanel = new JPanel();
         workersPanel.setLayout(new BoxLayout(workersPanel, BoxLayout.Y_AXIS));
+
+        JPanel workerPoolTop = new JPanel();
+        workerPoolTop.setLayout(new BoxLayout(workerPoolTop, BoxLayout.Y_AXIS));
         JTextField label = new JTextField("Workers");
         label.setFont(new Font("TimesRoman", Font.BOLD, 18));
-        workersPanel.add(label);
+        workerPoolTop.add(label);
+
+        workersQueue = new JTextField("Cars in queue: 0");
+        workersQueue.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        workerPoolTop.add(workersQueue);
+
+        workersProduced = new JTextField("Cars produced: 0");
+        workersProduced.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+        workerPoolTop.add(workersProduced);
+
+        workerPoolTop.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        workersPanel.add(workerPoolTop);
+
         workersView = new ArrayList<>();
         for(int i=0; i<workersCount; ++i){
             JTextField worker = new JTextField("Waiting", 20);
             workersView.add(worker);
             workersPanel.add(worker);
         }
+
         JSlider slider = new JSlider(JSlider.HORIZONTAL, 10, 120, 60);
         slider.addChangeListener(this);
         slider.setName("Worker");
@@ -216,6 +234,13 @@ public class UserInterface implements View, ChangeListener {
             case worker -> {
                 JTextField worker = workersView.get(ID - 1);
                 worker.setText("Worker " + ID + " " + obj.text);
+            }
+            case workersPool -> {
+                if(ID == 0) {
+                    workersQueue.setText("Cars in queue: " + obj.value);
+                }else{
+                    workersProduced.setText("Cars produced: " + obj.value);
+                }
             }
         }
         window.pack();

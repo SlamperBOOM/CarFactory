@@ -2,9 +2,9 @@ package factory.UI;
 
 public class UpdateValue {
     String text = null;
-    Integer value = null;
+    Long value = null;
 
-    public UpdateValue(int value){
+    public UpdateValue(long value){
         this.value = value;
     }
 
@@ -12,7 +12,7 @@ public class UpdateValue {
         this.text = text;
     }
 
-    public UpdateValue(String text, int value){
+    public UpdateValue(String text, long value){
         this.text = text;
         this.value = value;
     }

@@ -21,7 +21,7 @@ public class DealerThread extends Thread{
                 view.updateUI(NotifierType.dealer, dealer.ID, new UpdateValue("Selling"));
                 sleep(period);
                 view.updateUI(NotifierType.dealer, dealer.ID, new UpdateValue("Waiting for car"));
-                dealer.sellCar();
+                dealer.askForCar();
             }catch (InterruptedException e){
                 e.printStackTrace();
             }

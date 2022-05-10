@@ -9,7 +9,7 @@ public class Main {
             System.err.println("Can't read config file. Exiting");
             return;
         }
-        ui.createContentPane(factory.getWorkersCount(), factory.getDealersCount(), factory.getAccessorySuppliers());
+        ui.createContentPane(factory.getWorkersCount(), factory.getDealersCount());
         ui.setSetter(factory);
         factory.start();
     }

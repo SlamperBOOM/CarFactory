@@ -1,10 +1,10 @@
 package factory.dealers;
 
 import factory.details.Car;
-import factory.storages.CarStorage;
+import factory.storages.carStorage.CarStorage;
 
 public class Dealer {
-    CarStorage storage;
+    private CarStorage storage;
     int ID;
 
     public Dealer(CarStorage storage, int ID){
@@ -12,8 +12,11 @@ public class Dealer {
         this.ID = ID;
     }
 
-    public void sellCar(){
-        Car car = storage.getCar(ID);
+    public synchronized void askForCar(){
+        storage.askForCar(this);
+    }
+
+    public synchronized void sellCar(Car car){
         System.out.println("Dealer " + ID + " sold car: Car ID: " + car.getID() + ", " + car.getComponentsID());
     }
 }

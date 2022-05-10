@@ -3,7 +3,7 @@ package factory;
 import factory.UI.View;
 import factory.storages.AccessoryStorage;
 import factory.storages.BodyStorage;
-import factory.storages.CarStorage;
+import factory.storages.carStorage.CarStorage;
 import factory.storages.EngineStorage;
 import factory.suppliers.BodySupplier;
 import factory.suppliers.EngineSupplier;
@@ -70,16 +70,13 @@ public class Factory implements PeriodSetter{
         return Integer.parseInt(config.get("Dealers").toString());
     }
 
-    public int getAccessorySuppliers(){
-        return Integer.parseInt(config.get("AccessorySuppliers").toString());
-    }
-
     public void start(){
         bodySupplier.start();
         engineSupplier.start();
         accessorySuppliers.start();
-        dealers.start();
         workers.start();
+        carStorage.startMonitoring();
+        dealers.start();
     }
 
     @Override

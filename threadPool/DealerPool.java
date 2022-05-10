@@ -3,7 +3,7 @@ package threadPool;
 import factory.UI.View;
 import factory.dealers.Dealer;
 import factory.dealers.DealerThread;
-import factory.storages.CarStorage;
+import factory.storages.carStorage.CarStorage;
 
 import java.util.ArrayList;
 import java.util.List;
