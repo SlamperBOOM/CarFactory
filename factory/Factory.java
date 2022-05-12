@@ -1,6 +1,7 @@
 package factory;
 
 import factory.UI.View;
+import factory.dealers.DealerLogger;
 import factory.storages.AccessoryStorage;
 import factory.storages.BodyStorage;
 import factory.storages.carStorage.CarStorage;
@@ -14,7 +15,7 @@ import threadPool.workerPool.WorkerPool;
 import java.io.*;
 import java.util.*;
 
-public class Factory implements PeriodSetter{
+public class Factory implements PeriodSetter, Closer{
     Properties config = new Properties();
     BodyStorage bodyStorage;
     EngineStorage engineStorage;
@@ -59,6 +60,10 @@ public class Factory implements PeriodSetter{
 
         dealers = new DealerPool(carStorage, Integer.parseInt(config.get("Dealers").toString()), view);
         dealers.setPeriod(500);
+
+        if(config.get("LogSale").equals("true")){
+            DealerLogger.openLogger();
+        }
         return 0;
     }
 
@@ -77,6 +82,19 @@ public class Factory implements PeriodSetter{
         workers.start();
         carStorage.startMonitoring();
         dealers.start();
+    }
+
+    @Override
+    public void stop(){
+        carStorage.stop();
+        workers.stop();
+        dealers.stop();
+        accessorySuppliers.stop();
+        bodySupplier.setStopped();
+        engineSupplier.setStopped();
+        if(config.get("LogSale").equals("true")) {
+            DealerLogger.closeLogger();
+        }
     }
 
     @Override

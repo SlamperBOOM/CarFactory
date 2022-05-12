@@ -81,6 +81,10 @@ public class CarStorage{
         thread.start();
     }
 
+    public void stop(){
+        thread.setStopped();
+    }
+
     public int getCount() {
         synchronized (cars) {
             return cars.size();

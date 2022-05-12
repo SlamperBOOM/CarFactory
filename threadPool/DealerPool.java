@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DealerPool {
-    List<DealerThread> dealers;
-    CarStorage storage;
-    View view;
+    private List<DealerThread> dealers;
+    private CarStorage storage;
+    private View view;
 
     public DealerPool(CarStorage storage, int dealersCount, View ui){
         this.storage = storage;
@@ -35,6 +35,12 @@ public class DealerPool {
     public void start(){
         for(DealerThread dealer: dealers){
             dealer.start();
+        }
+    }
+
+    public void stop(){
+        for(DealerThread dealer: dealers){
+            dealer.setStopped();
         }
     }
 }

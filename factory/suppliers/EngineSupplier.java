@@ -7,10 +7,11 @@ import factory.details.Engine;
 import factory.storages.EngineStorage;
 
 public class EngineSupplier extends Thread{
-    EngineStorage storage;
-    View view;
-    int ID = 0;
-    int period = 500;
+    private EngineStorage storage;
+    private View view;
+    private int ID = 0;
+    private int period = 500;
+    private boolean isRunning = true;
 
     public EngineSupplier(EngineStorage storage, View ui){
         this.storage = storage;
@@ -19,7 +20,7 @@ public class EngineSupplier extends Thread{
 
     @Override
     public void run(){
-        while(true){
+        while(isRunning){
             try {
                 sleep(period);
                 storage.putEngine(new Engine(ID));
@@ -29,6 +30,10 @@ public class EngineSupplier extends Thread{
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setStopped(){
+        isRunning = false;
     }
 
     public void setPeriod(int period){

@@ -15,6 +15,7 @@ public class Worker extends Thread{
     private final int workerID;
     private View view;
     private WorkerPool pool;
+    boolean isRunning = true;
 
     public Worker(CarStorage storage, List<AssembleTask> carQueue, int ID, View ui, WorkerPool pool){
         this.storage = storage;
@@ -27,7 +28,7 @@ public class Worker extends Thread{
     @Override
     public void run(){
         AssembleTask task;
-        while(true){
+        while(isRunning){
             synchronized (carQueue){
                 if(carQueue.isEmpty()){
                     view.updateUI(NotifierType.worker, workerID, new UpdateValue("Waiting for request"));
@@ -56,6 +57,9 @@ public class Worker extends Thread{
         }
     }
 
+    public void setStopped(){
+        isRunning = false;
+    }
 
     public void setPeriod(int period){
         this.period = period;

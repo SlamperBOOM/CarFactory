@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccessorySuppliersPool {
-    List<AccessorySupplier> suppliers;
-    AccessoryStorage storage;
-    int producedCount;
-    View view;
+    private List<AccessorySupplier> suppliers;
+    private AccessoryStorage storage;
+    private int producedCount;
+    private View view;
 
     public AccessorySuppliersPool(AccessoryStorage storage, int suppliersCount, View ui){
         this.storage = storage;
@@ -43,6 +43,12 @@ public class AccessorySuppliersPool {
     public void start(){
         for(AccessorySupplier supplier:suppliers){
             supplier.start();
+        }
+    }
+
+    public void stop(){
+        for(AccessorySupplier supplier:suppliers){
+            supplier.setStopped();
         }
     }
 }

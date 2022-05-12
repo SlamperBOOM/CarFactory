@@ -11,6 +11,7 @@ public class Main {
         }
         ui.createContentPane(factory.getWorkersCount(), factory.getDealersCount());
         ui.setSetter(factory);
+        ui.setCloser(factory);
         factory.start();
     }
 }

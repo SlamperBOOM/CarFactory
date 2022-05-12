@@ -3,6 +3,8 @@ package factory.dealers;
 import factory.details.Car;
 import factory.storages.carStorage.CarStorage;
 
+import java.util.Date;
+
 public class Dealer {
     private CarStorage storage;
     int ID;
@@ -17,6 +19,7 @@ public class Dealer {
     }
 
     public synchronized void sellCar(Car car){
-        System.out.println("Dealer " + ID + " sold car: Car ID: " + car.getID() + ", " + car.getComponentsID());
+        Date date = new Date();
+        DealerLogger.logDeal(date + ": Dealer <" + ID + "> sold car: Car ID: <" + car.getID() + ">, " + car.getComponentsID());
     }
 }

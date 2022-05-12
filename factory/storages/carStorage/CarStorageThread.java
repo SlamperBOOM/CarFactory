@@ -1,7 +1,8 @@
 package factory.storages.carStorage;
 
 public class CarStorageThread extends Thread{
-    private CarStorage storage;
+    private final CarStorage storage;
+    private boolean isRunning = true;
 
     public CarStorageThread(CarStorage storage){
         this.storage = storage;
@@ -10,12 +11,15 @@ public class CarStorageThread extends Thread{
     @Override
     public void run(){
         CarItem item;
-        while(true){
+        while(isRunning){
             synchronized (storage) {
-                try {
-                    storage.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(storage.getCount() < 1) {
+                    try {
+                        storage.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
                 }
                 item = storage.getCar();
             }
@@ -23,5 +27,9 @@ public class CarStorageThread extends Thread{
                 item.dealer.sellCar(item.car);
             }
         }
+    }
+
+    public void setStopped(){
+        isRunning = false;
     }
 }

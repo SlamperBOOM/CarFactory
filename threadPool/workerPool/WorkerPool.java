@@ -54,6 +54,12 @@ public class WorkerPool {
         }
     }
 
+    public void stop(){
+        for(Worker worker: availableThread){
+            worker.setStopped();
+        }
+    }
+
     public synchronized void producedCar(){
         producedCars++;
         view.updateUI(NotifierType.workersPool, 1, new UpdateValue(producedCars));

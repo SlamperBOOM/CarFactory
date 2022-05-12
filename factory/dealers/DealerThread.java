@@ -5,9 +5,10 @@ import factory.UI.NotifierType;
 import factory.UI.UpdateValue;
 
 public class DealerThread extends Thread{
-    Dealer dealer;
-    int period = 1000;
-    View view;
+    private Dealer dealer;
+    private int period = 950;
+    private View view;
+    private boolean isRunning = true;
 
     public DealerThread(Dealer dealer, View ui){
         this.dealer = dealer;
@@ -16,7 +17,7 @@ public class DealerThread extends Thread{
 
     @Override
     public void run(){
-        while(true){
+        while(isRunning){
             try {
                 view.updateUI(NotifierType.dealer, dealer.ID, new UpdateValue("Selling"));
                 sleep(period);
@@ -26,6 +27,10 @@ public class DealerThread extends Thread{
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setStopped(){
+        isRunning = false;
     }
 
     public void setPeriod(int period){

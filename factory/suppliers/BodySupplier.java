@@ -7,10 +7,11 @@ import factory.details.Body;
 import factory.storages.BodyStorage;
 
 public class BodySupplier extends Thread{
-    BodyStorage storage;
-    View view;
-    int period = 500;
-    int ID = 0;
+    private BodyStorage storage;
+    private View view;
+    private int period = 500;
+    private int ID = 0;
+    private boolean isRunning = true;
 
     public BodySupplier(BodyStorage storage, View ui){
         this.storage = storage;
@@ -19,7 +20,7 @@ public class BodySupplier extends Thread{
 
     @Override
     public void run(){
-        while(true){
+        while(isRunning){
             try {
                 sleep(period);
                 storage.putBody(new Body(ID));
@@ -29,6 +30,10 @@ public class BodySupplier extends Thread{
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setStopped(){
+        isRunning = false;
     }
 
     public void setPeriod(int period){

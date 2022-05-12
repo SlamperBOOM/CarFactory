@@ -8,6 +8,7 @@ public class AccessorySupplier extends Thread{
     AccessoryStorage storage;
     int period = 1000;
     AccessorySuppliersPool pool;
+    private boolean isRunning = true;
 
     public AccessorySupplier(AccessoryStorage storage, AccessorySuppliersPool pool){
         this.storage = storage;
@@ -16,7 +17,7 @@ public class AccessorySupplier extends Thread{
 
     @Override
     public void run(){
-        while(true){
+        while(isRunning){
             try {
                 sleep(period);
                 storage.putAccessory(new Accessory());
@@ -25,6 +26,10 @@ public class AccessorySupplier extends Thread{
 
             }
         }
+    }
+
+    public void setStopped(){
+        isRunning = false;
     }
 
     public void setPeriod(int period){
