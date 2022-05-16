@@ -1,5 +1,6 @@
 package factory.suppliers;
 
+import factory.UI.Notifier;
 import factory.UI.NotifierType;
 import factory.UI.UpdateValue;
 import factory.UI.View;
@@ -25,7 +26,7 @@ public class EngineSupplier extends Thread{
                 sleep(period);
                 storage.putEngine(new Engine(ID));
                 ID++;
-                view.updateUI(NotifierType.supplier, SupplierType.engine, new UpdateValue(ID));
+                view.updateUI(new Notifier(NotifierType.supplier, SupplierType.engine, new UpdateValue(ID)));
             }catch (InterruptedException e){
                 e.printStackTrace();
             }

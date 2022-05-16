@@ -1,5 +1,6 @@
 package threadPool.workerPool;
 
+import factory.UI.Notifier;
 import factory.UI.NotifierType;
 import factory.UI.UpdateValue;
 import factory.UI.View;
@@ -19,7 +20,7 @@ public class WorkerPool {
     private CarStorage carStorage;
 
     private Set<Worker> availableThread;
-    private final List<AssembleTask> carQueue;
+    private final List<Assembler> carQueue;
     private long producedCars;
 
     private View view;
@@ -46,11 +47,11 @@ public class WorkerPool {
         }
     }
 
-    public void assembleCar(Dealer dealer){
+    public void assembleCar(){
         synchronized (carQueue){
-            carQueue.add(new AssembleTask(new Assembler(bodyStorage, engineStorage, accessoryStorage), dealer));
+            carQueue.add(new Assembler(bodyStorage, engineStorage, accessoryStorage));
             carQueue.notify();
-            view.updateUI(NotifierType.workersPool, 0, new UpdateValue(carQueue.size()));
+            view.updateUI(new Notifier(NotifierType.workersPool, 0, new UpdateValue(carQueue.size())));
         }
     }
 
@@ -62,7 +63,7 @@ public class WorkerPool {
 
     public synchronized void producedCar(){
         producedCars++;
-        view.updateUI(NotifierType.workersPool, 1, new UpdateValue(producedCars));
+        view.updateUI(new Notifier(NotifierType.workersPool, 1, new UpdateValue(producedCars)));
     }
 
     public void setPeriod(int period){

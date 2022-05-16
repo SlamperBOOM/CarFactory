@@ -1,5 +1,6 @@
 package factory.storages;
 
+import factory.UI.Notifier;
 import factory.UI.UpdateValue;
 import factory.UI.View;
 import factory.UI.NotifierType;
@@ -29,7 +30,7 @@ public class EngineStorage{
         Engine engine = engines.get(0);
         engines.remove(0);
         notify();
-        view.updateUI(NotifierType.storage, StorageType.engine, new UpdateValue(engines.size()));
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.engine, new UpdateValue(engines.size())));
         return engine;
     }
 
@@ -43,10 +44,6 @@ public class EngineStorage{
         }
         engines.add(engine);
         notify();
-        view.updateUI(NotifierType.storage, StorageType.engine, new UpdateValue(engines.size()));
-    }
-
-    public int getCount() {
-        return engines.size();
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.engine, new UpdateValue(engines.size())));
     }
 }

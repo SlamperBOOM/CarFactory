@@ -1,5 +1,6 @@
 package factory.storages.carStorage;
 
+import factory.UI.Notifier;
 import factory.UI.View;
 import factory.UI.NotifierType;
 import factory.UI.UpdateValue;
@@ -11,7 +12,8 @@ import threadPool.workerPool.WorkerPool;
 import java.util.*;
 
 public class CarStorage{
-    private final List<CarItem> cars;
+    private final List<Car> cars;
+    private final List<Dealer> dealersQueue;
     private WorkerPool workers;
     private int maxSize;
     private int carID = 0;
@@ -23,6 +25,7 @@ public class CarStorage{
         view = ui;
         cars = new ArrayList<>();
         thread = new CarStorageThread(this);
+        dealersQueue = new ArrayList<>();
     }
 
     public void setWorkers(WorkerPool workers){
@@ -30,10 +33,13 @@ public class CarStorage{
     }
 
     public synchronized void askForCar(Dealer dealer){
-        workers.assembleCar(dealer);
+        workers.assembleCar();
+        synchronized (dealersQueue) {
+            dealersQueue.add(dealer);
+        }
     }
 
-    public synchronized void putCar(Car car, Dealer askedDealer){
+    public synchronized void putCar(Car car){
         while(cars.size() >= maxSize) {
             try {
                 wait();
@@ -44,9 +50,9 @@ public class CarStorage{
         car.setID(carID);
         carID++;
         synchronized (cars) {
-            cars.add(new CarItem(askedDealer, car));
+            cars.add(car);
         }
-        view.updateUI(NotifierType.storage, StorageType.car, new UpdateValue(getCount()));
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.car, new UpdateValue(getCount())));
         notifyAll();
     }
 
@@ -55,26 +61,15 @@ public class CarStorage{
             if(cars.size() < 1){
                 return null;
             }else {
-                CarItem item = cars.remove(0);
-                view.updateUI(NotifierType.storage, StorageType.car, new UpdateValue(getCount()));
-                return item;
-            }
-        }
-    }
-
-    public Car getCarForDealer(Dealer dealer){
-        Car car = null;
-        synchronized (cars) {
-            for (int i = 0; i < cars.size(); ++i) {
-                if (cars.get(i).dealer.equals(dealer)) {
-                    car = cars.get(i).car;
-                    cars.remove(i);
-                    view.updateUI(NotifierType.storage, StorageType.car, new UpdateValue(getCount()));
-                    break;
+                Car car = cars.remove(0);
+                Dealer targetDealer;
+                synchronized (dealersQueue) {
+                    targetDealer = dealersQueue.remove(0);
                 }
+                view.updateUI(new Notifier(NotifierType.storage, StorageType.car, new UpdateValue(getCount())));
+                return new CarItem(targetDealer, car);
             }
         }
-        return car;
     }
 
     public void startMonitoring(){

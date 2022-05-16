@@ -104,7 +104,7 @@ public class UserInterface implements View, ChangeListener {
                 bodySupplierSummary.setEditable(false);
                 supplierPane.add(bodySupplierSummary);
 
-                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 300, 10));
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 600, 10));
                 spinner.addChangeListener(this);
                 spinner.setName("BodySupplier");
                 supplierPane.add(spinner);
@@ -123,7 +123,7 @@ public class UserInterface implements View, ChangeListener {
                 engineSupplierSummary.setEditable(false);
                 supplierPane.add(engineSupplierSummary);
 
-                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 300, 10));
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 600, 10));
                 spinner.addChangeListener(this);
                 spinner.setName("EngineSupplier");
                 supplierPane.add(spinner);
@@ -142,7 +142,7 @@ public class UserInterface implements View, ChangeListener {
                 accessorySupplierSummary.setEditable(false);
                 supplierPane.add(accessorySupplierSummary);
 
-                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 300, 10));
+                JSpinner spinner = new JSpinner(new SpinnerNumberModel(120, 10, 400, 10));
                 spinner.addChangeListener(this);
                 spinner.setName("AccessorySupplier");
                 supplierPane.add(spinner);
@@ -233,7 +233,7 @@ public class UserInterface implements View, ChangeListener {
             workersPanel.add(worker);
         }
 
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(60, 10, 180, 10));
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(60, 10, 200, 10));
         spinner.addChangeListener(this);
         spinner.setName("Worker");
         workersPanel.add(spinner);
@@ -273,46 +273,38 @@ public class UserInterface implements View, ChangeListener {
     }
 
     @Override
-    public synchronized void updateUI(NotifierType notifier, int ID, UpdateValue obj) {
-        switch (notifier){
+    public synchronized void updateUI(Notifier notifier){
+        switch (notifier.getNotifierType()){
             case dealer -> {
-                JTextField dealer = dealersView.get(ID - 1);
-                dealer.setText("Dealer " + ID + " " + obj.text);
+                JTextField dealer = dealersView.get(notifier.getID() - 1);
+                dealer.setText("Dealer " + notifier.getID() + ": " + notifier.getValue().text);
             }
             case worker -> {
-                JTextField worker = workersView.get(ID - 1);
-                worker.setText("Worker " + ID + " " + obj.text);
+                JTextField worker = workersView.get(notifier.getID() - 1);
+                worker.setText("Worker " + notifier.getID() + ": " + notifier.getValue().text);
             }
             case workersPool -> {
-                if(ID == 0) {
-                    workersQueue.setText("Cars in queue: " + obj.value);
+                if(notifier.getID() == 0) {
+                    workersQueue.setText("Cars in queue: " + notifier.getValue().value);
                 }else{
-                    workersProduced.setText("Cars produced: " + obj.value);
+                    workersProduced.setText("Cars produced: " + notifier.getValue().value);
                 }
             }
-        }
-        notifyAll();
-        window.pack();
-    }
-
-    @Override
-    public synchronized void updateUI(NotifierType notifier, StorageType storage, UpdateValue obj) {
-        switch (storage){
-            case car -> carStorageView.setText("Cars: " + obj.value);
-            case accessory -> accessoryStorageView.setText("Accessories: "+obj.value);
-            case body -> bodyStorageView.setText("Bodies: " + obj.value);
-            case engine -> engineStorageView.setText("Engines: "+obj.value);
-        }
-        notifyAll();
-        window.pack();
-    }
-
-    @Override
-    public synchronized void updateUI(NotifierType notifier, SupplierType supplier, UpdateValue obj) {
-        switch (supplier){
-            case body -> bodySupplierSummary.setText("Bodies produced: " + obj.value);
-            case engine -> engineSupplierSummary.setText("Engines produced: " + obj.value);
-            case accessory -> accessorySupplierSummary.setText("Accessories produced: " + obj.value);
+            case storage -> {
+                switch (notifier.getStorageType()) {
+                    case car -> carStorageView.setText("Cars: " + notifier.getValue().value);
+                    case accessory -> accessoryStorageView.setText("Accessories: " + notifier.getValue().value);
+                    case body -> bodyStorageView.setText("Bodies: " + notifier.getValue().value);
+                    case engine -> engineStorageView.setText("Engines: " + notifier.getValue().value);
+                }
+            }
+            case supplier -> {
+                switch (notifier.getSupplierType()){
+                    case body -> bodySupplierSummary.setText("Bodies produced: " + notifier.getValue().value);
+                    case engine -> engineSupplierSummary.setText("Engines produced: " + notifier.getValue().value);
+                    case accessory -> accessorySupplierSummary.setText("Accessories produced: " + notifier.getValue().value);
+                }
+            }
         }
         notifyAll();
         window.pack();

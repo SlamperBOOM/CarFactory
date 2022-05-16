@@ -1,5 +1,6 @@
 package factory.storages;
 
+import factory.UI.Notifier;
 import factory.UI.UpdateValue;
 import factory.UI.View;
 import factory.UI.NotifierType;
@@ -30,7 +31,7 @@ public class AccessoryStorage{
         Accessory accessory = accessories.get(0);
         accessories.remove(0);
         notify();
-        view.updateUI(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size()));
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size())));
         return accessory;
     }
 
@@ -46,10 +47,6 @@ public class AccessoryStorage{
         accessories.add(accessory);
         ID++;
         notify();
-        view.updateUI(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size()));
-    }
-
-    public int getCount() {
-        return accessories.size();
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.accessory, new UpdateValue(accessories.size())));
     }
 }

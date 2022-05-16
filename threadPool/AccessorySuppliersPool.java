@@ -1,5 +1,6 @@
 package threadPool;
 
+import factory.UI.Notifier;
 import factory.UI.UpdateValue;
 import factory.UI.View;
 import factory.UI.NotifierType;
@@ -37,7 +38,7 @@ public class AccessorySuppliersPool {
 
     public synchronized void add(){
         producedCount++;
-        view.updateUI(NotifierType.supplier, SupplierType.accessory, new UpdateValue(producedCount));
+        view.updateUI(new Notifier(NotifierType.supplier, SupplierType.accessory, new UpdateValue(producedCount)));
     }
 
     public void start(){

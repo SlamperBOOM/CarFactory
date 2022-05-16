@@ -1,5 +1,6 @@
 package factory.storages;
 
+import factory.UI.Notifier;
 import factory.UI.UpdateValue;
 import factory.UI.View;
 import factory.UI.NotifierType;
@@ -30,7 +31,7 @@ public class BodyStorage{
         Body body = bodies.get(0);
         bodies.remove(0);
         notify();
-        view.updateUI(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size()));
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size())));
         return body;
     }
 
@@ -44,10 +45,6 @@ public class BodyStorage{
         }
         bodies.add(body);
         notify();
-        view.updateUI(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size()));
-    }
-
-    public int getCount(){
-        return bodies.size();
+        view.updateUI(new Notifier(NotifierType.storage, StorageType.body, new UpdateValue(bodies.size())));
     }
 }
