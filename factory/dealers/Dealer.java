@@ -34,7 +34,7 @@ public class Dealer {
 
     public synchronized void sellCar(Car car){
         Date date = new Date();
-        DealerLogger.logDeal(date + ": Dealer <" + ID + "> sold car: Car ID: <" + car.getID() + ">, " + car.getComponentsID());
+        DealerLogger.logDeal(date.toString() + ": Dealer <" + ID + "> sold car: Car ID: <" + car.getID() + ">, " + car.getComponentsID());
         soldCarsCount++;
         view.updateUI(new Notifier(NotifierType.dealer, ID,
                 new UpdateValue("sold " + soldCarsCount + " cars, waiting for " + (askedCars - soldCarsCount))));
