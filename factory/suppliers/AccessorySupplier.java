@@ -2,7 +2,6 @@ package factory.suppliers;
 
 import factory.details.Accessory;
 import factory.storages.AccessoryStorage;
-import threadPool.AccessorySuppliersPool;
 
 public class AccessorySupplier extends Thread{
     AccessoryStorage storage;

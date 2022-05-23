@@ -1,13 +1,14 @@
 package factory.storages.carStorage;
 
-import factory.UI.Notifier;
-import factory.UI.View;
-import factory.UI.NotifierType;
-import factory.UI.UpdateValue;
+import UI.Notifier;
+import UI.View;
+import UI.NotifierType;
+import UI.UpdateValue;
+import factory.assemble.AssemblerCreator;
 import factory.dealers.Dealer;
 import factory.details.Car;
 import factory.storages.StorageType;
-import threadPool.workerPool.WorkerPool;
+import threadPool.WorkerPool;
 
 import java.util.*;
 
@@ -17,6 +18,8 @@ public class CarStorage{
     private WorkerPool workers;
     private int maxSize;
     private int carID = 0;
+
+
     private CarStorageThread thread;
     View view;
 
@@ -33,7 +36,7 @@ public class CarStorage{
     }
 
     public synchronized void askForCar(Dealer dealer){
-        workers.assembleCar();
+        workers.execute(AssemblerCreator.createAssembleTask(this));
         synchronized (dealersQueue) {
             dealersQueue.add(dealer);
         }

@@ -12,6 +12,11 @@ public class CarStorageThread extends Thread{
     public void run(){
         CarItem item;
         while(isRunning){
+            try {
+                sleep(50);
+            }catch (InterruptedException e){
+
+            }
             synchronized (storage) {
                 if(storage.getCount() < 1) {
                     try {

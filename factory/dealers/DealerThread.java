@@ -1,6 +1,6 @@
 package factory.dealers;
 
-import factory.UI.View;
+import UI.View;
 
 public class DealerThread extends Thread{
     private Dealer dealer;

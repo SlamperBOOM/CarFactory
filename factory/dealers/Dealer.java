@@ -1,9 +1,9 @@
 package factory.dealers;
 
-import factory.UI.Notifier;
-import factory.UI.NotifierType;
-import factory.UI.UpdateValue;
-import factory.UI.View;
+import UI.Notifier;
+import UI.NotifierType;
+import UI.UpdateValue;
+import UI.View;
 import factory.details.Car;
 import factory.storages.carStorage.CarStorage;
 

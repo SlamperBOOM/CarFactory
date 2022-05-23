@@ -1,6 +1,7 @@
 package factory;
 
-import factory.UI.View;
+import UI.View;
+import factory.assemble.AssemblerCreator;
 import factory.dealers.DealerLogger;
 import factory.storages.AccessoryStorage;
 import factory.storages.BodyStorage;
@@ -8,9 +9,9 @@ import factory.storages.carStorage.CarStorage;
 import factory.storages.EngineStorage;
 import factory.suppliers.BodySupplier;
 import factory.suppliers.EngineSupplier;
-import threadPool.AccessorySuppliersPool;
-import threadPool.DealerPool;
-import threadPool.workerPool.WorkerPool;
+import factory.suppliers.AccessorySuppliersPool;
+import factory.dealers.DealerPool;
+import threadPool.WorkerPool;
 
 import java.io.*;
 import java.util.*;
@@ -44,8 +45,11 @@ public class Factory implements PeriodSetter, Closer{
         }
 
         bodyStorage = new BodyStorage(Integer.parseInt(config.get("BodyStorageSize").toString()), view);
+        AssemblerCreator.setBodyStorage(bodyStorage);
         engineStorage = new EngineStorage(Integer.parseInt(config.get("EngineStorageSize").toString()), view);
+        AssemblerCreator.setEngineStorage(engineStorage);
         accessoryStorage = new AccessoryStorage(Integer.parseInt(config.get("AccessoryStorageSize").toString()), view);
+        AssemblerCreator.setAccessoryStorage(accessoryStorage);
         carStorage = new CarStorage(Integer.parseInt(config.get("CarStorageSize").toString()), view);
 
         bodySupplier = new BodySupplier(bodyStorage, view);
@@ -53,8 +57,7 @@ public class Factory implements PeriodSetter, Closer{
         accessorySuppliers = new AccessorySuppliersPool(accessoryStorage, Integer.parseInt(config.get("AccessorySuppliers").toString()), view);
 
         workers = new WorkerPool(
-                Integer.parseInt(config.get("Workers").toString()), bodyStorage, engineStorage,
-                accessoryStorage, carStorage, view);
+                Integer.parseInt(config.get("Workers").toString()), view);
         workers.setPeriod(1000);
         carStorage.setWorkers(workers);
 

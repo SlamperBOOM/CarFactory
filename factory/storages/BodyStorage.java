@@ -1,9 +1,9 @@
 package factory.storages;
 
-import factory.UI.Notifier;
-import factory.UI.UpdateValue;
-import factory.UI.View;
-import factory.UI.NotifierType;
+import UI.Notifier;
+import UI.UpdateValue;
+import UI.View;
+import UI.NotifierType;
 import factory.details.Body;
 
 import java.util.ArrayList;
